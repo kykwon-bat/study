@@ -28,8 +28,7 @@ public class RedisQueueService {
     }
 
     public JobQueuePayload dequeue() {
-        JobQueuePayload payload = (JobQueuePayload) redisTemplate.opsForList().leftPop(QUEUE_KEY);
-        return payload;
+        return (JobQueuePayload) redisTemplate.opsForList().leftPop(QUEUE_KEY);
     }
 
     public List<Object> getAllQueuedItems() {

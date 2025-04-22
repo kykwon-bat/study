@@ -1,6 +1,5 @@
 package com.example.study.config.listener;
 
-import com.example.study.service.RedisQueueService;
 import com.example.study.service.TccStateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 public class JobTccListener implements JobExecutionListener {
 
     private final TccStateService tccStateService;
-    private final RedisQueueService redisQueueService;
 
     @Override
     public void beforeJob(JobExecution jobExecution) {

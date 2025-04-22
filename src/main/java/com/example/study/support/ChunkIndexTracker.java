@@ -15,8 +15,4 @@ public class ChunkIndexTracker {
     public static Long getChunkIndex() {
         return threadLocalChunkIndex.get();
     }
-
-    public static void clear() {
-        threadLocalChunkIndex.remove();
-    }
 }
