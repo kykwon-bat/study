@@ -39,7 +39,9 @@ public class StepLauncherService {
 
         try {
             log.info("🚀 Writer 실행 시작 - jobName: {}, 아이템 수: {}", jobName, items.size());
-            writer.write((Chunk<?>) items);
+            // ✅ List를 Chunk로 wrapping
+            Chunk<Object> chunk = new Chunk<>(items);
+            writer.write(chunk);
             log.info("✅ Writer 처리 완료");
         } catch (Exception e) {
             log.error("❌ Writer 실행 중 예외 발생 - jobName: {}", jobName, e);
