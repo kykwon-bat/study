@@ -6,6 +6,7 @@ import com.example.study.config.listener.StepTccListener;
 import com.example.study.repository.EmployeeRepository;
 import com.example.study.repository.ItemProcessorRegistry;
 import com.example.study.service.RedisQueueService;
+import com.example.study.service.StepLauncherService;
 import com.example.study.support.ChunkIndexTracker;
 import com.example.study.util.TokenBucketRateLimiter;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,9 @@ public class Employee {
 
     @Autowired
     private final ItemProcessorRegistry processorRegistry;
+
+    @Autowired
+    private final StepLauncherService stepLauncherService;
 
     @Bean
     public Job employeeJob(JobRepository jobRepository, Step employeeStep, JobTccListener jobListener) {
@@ -118,11 +122,14 @@ public class Employee {
     @Bean
     @StepScope
     public ItemWriter<com.example.study.entity.Employee> employeeItemWriter() {
-        return items -> {
+        ItemWriter<com.example.study.entity.Employee> writer = items -> {
             employeeRepository.saveAll(items);
             for (com.example.study.entity.Employee emp : items) {
                 log.info("[WRITE] {}", emp);
             }
         };
+
+        stepLauncherService.registerWriter("employeeJob", (ItemWriter<?>) writer);
+        return writer;
     }
 }
