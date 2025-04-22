@@ -1,0 +1,75 @@
+spring:
+  application:
+    name: study
+
+  batch:
+    job:
+      enabled: false
+
+  data:
+    redis:
+      host: 192.168.1.36
+      port: 6379
+      timeout: 6000
+
+  datasource:
+    url: jdbc:oracle:thin:@192.168.1.36:1521:XE
+    driver-class-name: oracle.jdbc.OracleDriver
+    username: myuser
+    password: mypass
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 30000
+      connection-timeout: 30000
+      pool-name: OracleHikariCP
+
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
+    hibernate:
+      ddl-auto: none  # ??? create, update ? ?? ??
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+        query:
+          trace-parameter-values: true
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 2s # intervalMillis = 2000
+
+  task:
+    scheduling:
+      pool:
+        size: 2
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+logging:
+  level:
+    org.hibernate.SQL: ERROR
+    org.hibernate.orm.jdbc.bind: TRACE
+    #org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+rate-limiter:
+  capacity: 1000
+  refill:
+    tokens: 1000
+    interval: 1000
