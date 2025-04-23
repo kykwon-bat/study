@@ -69,7 +69,7 @@ logging:
     #org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 rate-limiter:
-  capacity: 1000
+  capacity: 100
   refill:
-    tokens: 1000
+    tokens: 100
     interval: 1000

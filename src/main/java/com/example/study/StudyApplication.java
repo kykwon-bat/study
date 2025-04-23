@@ -1,6 +1,7 @@
 package com.example.study;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
@@ -20,6 +21,7 @@ import java.util.Map;
 @SpringBootApplication
 @RequiredArgsConstructor
 @EnableScheduling
+@Slf4j
 public class StudyApplication{
 
     private final JobLauncher jobLauncher;
@@ -42,8 +44,14 @@ public class StudyApplication{
                     ? arguments.getOptionValues("job_name").get(0)
                     : null;
 
-            if (jobName == null || !jobs.containsKey(jobName)) {
-                throw new IllegalArgumentException("🚫 유효한 job_name을 지정하세요: " + jobName);
+            if (jobName == null) {
+                log.error("❌ 실행할 job_name 파라미터가 없습니다. 예: --job_name=employeeJob");
+                System.exit(1);
+            }
+
+            if (!jobs.containsKey(jobName)) {
+                log.error("❌ 등록되지 않은 Job 이름입니다: {}", jobName);
+                System.exit(1);
             }
 
             Job job = jobs.get(jobName);
